@@ -1,7 +1,13 @@
 package com.thoughtworks.capability.gtb;
 
 import java.time.LocalDateTime;
+import java.time.Period;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Set;
+
+import static java.time.ZoneId.getAvailableZoneIds;
 
 /**
  * 脑洞会议系统v3.0
@@ -22,13 +28,27 @@ public class MeetingSystemV3 {
     LocalDateTime meetingTime = LocalDateTime.parse(timeStr, formatter);
 
     LocalDateTime now = LocalDateTime.now();
+
     if (now.isAfter(meetingTime)) {
-      LocalDateTime tomorrow = now.plusDays(1);
+
+      Period period=Period.of(0,0,1);
+
+      LocalDateTime tomorrow = now.plus(period);
+
       int newDayOfYear = tomorrow.getDayOfYear();
+
       meetingTime = meetingTime.withDayOfYear(newDayOfYear);
 
+      ZonedDateTime zonedDateTime=meetingTime.atZone(ZoneId.of("Europe/London"));
+
+      ZonedDateTime newZonedDateTime=zonedDateTime.withZoneSameInstant(ZoneId.of("America/Chicago"));
+
+
+
       // 格式化新会议时间
-      String showTimeStr = formatter.format(meetingTime);
+      String showTimeStr = formatter.format(newZonedDateTime);
+
+
       System.out.println(showTimeStr);
     } else {
       System.out.println("会议还没开始呢");
